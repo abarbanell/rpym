@@ -13,8 +13,9 @@ else
 fi
 
 
-sudo apt-get install python-pip
+sudo apt-get install python-pip python-dev
 sudo pip install statsd
+sudo pip install psutil
 
 
 
