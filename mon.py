@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# monituôring script to send off some system stats to statsd.
+# monitoring script to send off some system stats to statsd.
 # this should be called from crontab loke this: 
 # 
 # m h  dom mon dow   command
@@ -24,7 +24,7 @@ c = statsd.StatsClient('statsd', 8125, prefix=host)
 
 c.incr('heartbeat')
 
-c.gauge('cpu.percent', icpu)
+c.gauge('cpu.percent', cpu)
  
 
 
