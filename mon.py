@@ -16,14 +16,22 @@ import statsd
 import os
 import psutil
 
+# get data 
 host = os.uname()[1]
 cpu = psutil.cpu_percent(interval=1)
+f = open('/sys/class/thermal/thermal_zone0/temp', 'r')
+l = f.readline()
+temp = 1.0 * float(l)/1000
+ 
 
+
+
+# send data
 c = statsd.StatsClient('statsd', 8125, prefix=host)
 
 c.incr('heartbeat')
-
 c.gauge('cpu.percent', cpu)
+c.gauge('cpu.temp', temp)
  
 
 
