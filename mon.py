@@ -18,10 +18,13 @@ import psutil
 
 # get data 
 host = os.uname()[1]
+rasp = ('armv' in os.uname()[4])
+
 cpu = psutil.cpu_percent(interval=1)
-f = open('/sys/class/thermal/thermal_zone0/temp', 'r')
-l = f.readline()
-temp = 1.0 * float(l)/1000
+if rasp:
+    f = open('/sys/class/thermal/thermal_zone0/temp', 'r')
+    l = f.readline()
+    temp = 1.0 * float(l)/1000
 usage = psutil.disk_usage("/")
  
 
@@ -30,7 +33,10 @@ c = statsd.StatsClient('statsd', 8125, prefix=host)
 
 c.incr('heartbeat')
 c.gauge('cpu.percent', cpu)
-c.gauge('cpu.temp', temp)
+
+if rasp:
+    c.gauge('cpu.temp', temp)
+
 c.gauge('disk.root.total', usage.total)
 c.gauge('disk.root.used', usage.used)
 c.gauge('disk.root.free', usage.free)
