@@ -26,4 +26,10 @@ if rasp:
 else:
     print 'Not a Raspberry, no CPU temperature' 
 
+print 'Getting CPU usage per process'
+
+print 'user\tsystem\tpercent\tprocess'
+for p in psutil.process_iter():
+    print ('{}\t{}\t{}%\t{}'.format(p.cpu_times().user, p.cpu_times().system, p.cpu_percent(), p.name()))
+
 
