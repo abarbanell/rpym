@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
-# monitoring script to send off some system stats to statsd.
+# monitoring script to send off sensor data from DHT22 sensor  to statsd.
 # this should be called from crontab loke this: 
 # 
 # m h  dom mon dow   command
-# * * * * * $HOME/github/abarbanell/rpym/mon.py
+# * * * * * $HOME/github/abarbanell/rpym/mon-dht.py
 #
 # this expects the statsd server listed in the /etc/hosts table like this: 
 #
@@ -13,33 +13,24 @@
 
 
 import statsd
+import serial
+import json
 import os
-import psutil
+
+# setup
+host = os.uname()[1]
+ser = serial.Serial('/dev/ttyACM0', 9600)
 
 # get data 
-host = os.uname()[1]
-rasp = ('armv' in os.uname()[4])
+msg = ser.readline()
+res = json.loads(msg)
+humidity = res[u"humidity"]
+celsius = res[u"temperature"]
 
-cpu = psutil.cpu_percent(interval=1)
-if rasp:
-    f = open('/sys/class/thermal/thermal_zone0/temp', 'r')
-    l = f.readline()
-    temp = 1.0 * float(l)/1000
-usage = psutil.disk_usage("/")
- 
 
 # send data
 c = statsd.StatsClient('statsd', 8125, prefix=host)
 
-c.incr('heartbeat')
-c.gauge('cpu.percent', cpu)
-
-if rasp:
-    c.gauge('cpu.temp', temp)
-
-c.gauge('disk.root.total', usage.total)
-c.gauge('disk.root.used', usage.used)
-c.gauge('disk.root.free', usage.free)
-c.gauge('disk.root.percent', usage.percent)
- 
+c.gauge('dht.humidity', humidity)
+c.gauge('dht.celsius', celsius)
 
