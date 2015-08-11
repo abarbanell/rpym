@@ -26,6 +26,7 @@ if rasp:
     l = f.readline()
     temp = 1.0 * float(l)/1000
 usage = psutil.disk_usage("/")
+mem = psutil.virtual_memory()
  
 
 # send data
@@ -41,5 +42,5 @@ c.gauge('disk.root.total', usage.total)
 c.gauge('disk.root.used', usage.used)
 c.gauge('disk.root.free', usage.free)
 c.gauge('disk.root.percent', usage.percent)
- 
+c.gauge('mem.percent', mem.percent) 
 
