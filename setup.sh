@@ -16,6 +16,7 @@ fi
 sudo apt-get install python-pip python-dev
 sudo pip install statsd
 sudo pip install psutil
+sudo pip install requests
 
 
 

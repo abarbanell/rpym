@@ -4,7 +4,7 @@
 # this should be called from crontab loke this: 
 # 
 # m h  dom mon dow   command
-# * * * * * $HOME/github/abarbanell/rpym/mon-soil-nano.py
+# * * * * * THREESCALE_USER_KEY=your_key_here $HOME/github/abarbanell/rpym/mon-soil-nano.py
 #
 # this expects the statsd server listed in the /etc/hosts table like this: 
 #
@@ -21,6 +21,8 @@ import serial
 import json
 import os
 import time
+import requests
+import datetime
 
 # setup
 host = os.uname()[1]
@@ -39,8 +41,21 @@ msg = ser.readline()
 res = json.loads(msg)
 soil = res[u"soil"]
 
-# send data
+# send data to statsd
 c = statsd.StatsClient('statsd', 8125, prefix=host)
 
 c.gauge('sensor.soil', soil)
+
+
+# send data to limitless-garden
+url='http://limitless-garden-9668.herokuapp.com/api/collections/sensor'
+querypayload={'user_key': os.getenv('THREESCALE_USER_KEY')};
+
+res[u"host"] = host;
+res[u"sensor"] = 'soil';
+res[u"timestamp"] = datetime.datetime.utcnow().isoformat();
+
+
+r = requests.post(url, params=querypayload, json=res)
+
 
