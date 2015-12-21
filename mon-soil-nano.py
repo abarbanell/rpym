@@ -27,7 +27,7 @@ import datetime
 # setup
 host = os.uname()[1]
 # TODO: need to find a way to detect the correct USB port device - now hardcoding the device
-ser = serial.Serial('/dev/ttyUSB1', 9600)
+ser = serial.Serial('/dev/ttyUSB0', 9600)
 # we need to wait for the arduino to reset itself before we write..
 time.sleep(2)
 
