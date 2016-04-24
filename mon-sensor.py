@@ -49,7 +49,7 @@ c.gauge('sensor.soil', soil)
 
 
 # send data to limitless-garden (and ignore result) 
-url='http://limitless-garden-9668.herokuapp.com/api/collections/sensor'
+url='http://lg.dokku.abarbanell.de/api/collections/sensor'
 querypayload={'user_key': os.getenv('THREESCALE_USER_KEY')};
 
 res[u"host"] = host;

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # monitoring script to send off some system stats to statsd.
-# this should be called from crontab loke this: 
+# this should be called from crontab like this: 
 # 
 # m h  dom mon dow   command
 # * * * * * $HOME/github/abarbanell/rpym/mon.py
