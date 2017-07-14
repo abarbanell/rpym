@@ -30,7 +30,7 @@ usage = psutil.disk_usage("/")
 mem = psutil.virtual_memory()
 
 # open and max files 
-fds = subprocess.check_output(["sysctl", "-n", "fs.file-nr"]);
+fds = subprocess.check_output(["/sbin/sysctl", "-n", "fs.file-nr"]);
 fdarr = [int(s) for s in fds.split() if s.isdigit()]
  
 
