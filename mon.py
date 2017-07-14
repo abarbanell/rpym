@@ -15,6 +15,7 @@
 import statsd
 import os
 import psutil
+import subprocess
 
 # get data 
 host = os.uname()[1]
@@ -27,6 +28,10 @@ if rasp:
     temp = 1.0 * float(l)/1000
 usage = psutil.disk_usage("/")
 mem = psutil.virtual_memory()
+
+# open and max files 
+fds = subprocess.check_output(["sysctl", "-n", "fs.file-nr"]);
+fdarr = [int(s) for s in fds.split() if s.isdigit()]
  
 
 # send data
@@ -43,4 +48,5 @@ c.gauge('disk.root.used', usage.used)
 c.gauge('disk.root.free', usage.free)
 c.gauge('disk.root.percent', usage.percent)
 c.gauge('mem.percent', mem.percent) 
-
+c.gauge('files.open', fdarr[0])
+c.gauge('files.max', fdarr[2])

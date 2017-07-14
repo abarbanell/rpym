@@ -14,9 +14,10 @@ fi
 
 
 sudo apt-get install python-pip python-dev
-sudo pip install statsd
-sudo pip install psutil
-sudo pip install requests
+# sudo not required for pip
+pip install statsd
+pip install psutil
+pip install requests
 
 
 
